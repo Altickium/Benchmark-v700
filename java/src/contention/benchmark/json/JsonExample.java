@@ -10,11 +10,13 @@ import contention.benchmark.workload.thread.loops.builders.*;
 import contention.benchmark.workload.stop.condition.StopCondition;
 import contention.benchmark.workload.stop.condition.Timer;
 import contention.benchmark.workload.thread.loops.abstractions.ThreadLoopBuilder;
+import contention.benchmark.workload.thread.loops.impls.MultiDefaultThreadLoop;
 import contention.benchmark.workload.thread.loops.parameters.RatioThreadLoopParameters;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CyclicBarrier;
 
 public class JsonExample {
     public static ArgsGeneratorBuilder getDefaultArgsGeneratorBuilder() {
@@ -48,6 +50,10 @@ public class JsonExample {
                 .setDataMapBuilder(new ArrayDataMapBuilder());
     }
 
+    public static ArgsGeneratorBuilder getToyArgsGeneratorBuilder() {
+        return new CycleIdArgsGeneratorBuilder();
+    }
+
 
     public static ThreadLoopBuilder getDefaultThreadLoopBuilder(ArgsGeneratorBuilder argsGeneratorBuilder) {
         return new DefaultThreadLoopBuilder()
@@ -66,6 +72,15 @@ public class JsonExample {
                 .setArgsGeneratorBuilder(argsGeneratorBuilder);
     }
 
+    public static CycleThreadLoopBuilder getToyThreadLoopBuilder(ArgsGeneratorBuilder argsGeneratorBuilder) {
+        return new CycleThreadLoopBuilder()
+                .setParamSize(3)
+                .setRatios(0, new RatioThreadLoopParameters(0.1, 0.1))
+                .setRatios(1, new RatioThreadLoopParameters(0.3, 0.4))
+                .setRatios(2, new RatioThreadLoopParameters(0.2, 0.05))
+                .setArgsGeneratorBuilder(argsGeneratorBuilder);
+    }
+
     public static void main(String[] args) {
         /**
          * The first step is the creation the BenchParameters class.
@@ -77,7 +92,7 @@ public class JsonExample {
          * Set the range of keys.
          */
 
-        benchParameters.setRange(2048);
+        benchParameters.setRange(3);
 
         /**
          * Create the Parameters class for benchmarking (test).
@@ -103,13 +118,13 @@ public class JsonExample {
          * TemporarySkewedArgsGeneratorBuilder and CreakersAndWaveArgsGeneratorBuilder are also presented
          * in the corresponding functions
          */
-        ArgsGeneratorBuilder argsGeneratorBuilder = getDefaultArgsGeneratorBuilder();
+        ArgsGeneratorBuilder argsGeneratorBuilder = getToyArgsGeneratorBuilder();
 
         /**
          * in addition to the DefaultThreadLoopBuilder,
          * TemporaryOperationThreadLoopBuilder is also presented in the corresponding function
          */
-        ThreadLoopBuilder threadLoopBuilder = getDefaultThreadLoopBuilder(argsGeneratorBuilder);
+        ThreadLoopBuilder threadLoopBuilder = getToyThreadLoopBuilder(argsGeneratorBuilder);
 
         /**
          * now add the ThreadLoopBuilders (you can add several different)
