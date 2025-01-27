@@ -11,6 +11,7 @@
 #include "workloads/data_maps/impls/array_data_map.h"
 
 class ArrayDataMapBuilder : public DataMapBuilder {
+protected:
     long long* data = nullptr;
 
 public:
