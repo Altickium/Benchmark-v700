@@ -15,3 +15,6 @@
 [submodule "cpp/json"]
 	path = cpp/json
 	url = https://github.com/nlohmann/json.git
+[submodule "cpp/ds/ALEX"]
+	path = cpp/ds/ALEX
+	url = git@github.com:microsoft/ALEX.git
