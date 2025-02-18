@@ -1,5 +1,5 @@
-#ifndef ALEX_ADAPTER_H
-#define ALEX_ADAPTER_H
+#ifndef TRIE_SPLINE_ADAPTER_H
+#define TRIE_SPLINE_ADAPTER_H
 
 #include <iostream>
 #include "errors.h"

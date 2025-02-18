@@ -1,5 +1,5 @@
-#ifndef ALEX_ADAPTER_H
-#define ALEX_ADAPTER_H
+#ifndef FST_ADAPTER_H
+#define FST_ADAPTER_H
 
 #include <iostream>
 #include "errors.h"
@@ -8,12 +8,13 @@
 #   include "tree_stats.h"
 #endif
 
-#include "ALEX/src/core/alex.h"
+#include "FST/include/fst_builder.hpp"
+#include "FST/include/fst.hpp"
 
 #define RECORD_MANAGER_T record_manager<Reclaim, Alloc, Pool, int>
-#define DATA_STRUCTURE_T alex::Alex<K, V>
+#define DATA_STRUCTURE_T fst::FST
 
-template <typename K, typename V, class Reclaim = reclaimer_debra<K>, class Alloc = allocator_new<K>, class Pool = pool_none<K>>
+template <typename K = std::string, typename V = int64_t, class Reclaim = reclaimer_debra<K>, class Alloc = allocator_new<K>, class Pool = pool_none<K>>
 class ds_adapter {
 private:
     const V NO_VALUE;
@@ -45,11 +46,7 @@ public:
     }
 
     bool contains(const int tid, const K& key) {
-        auto it = ds->find(key);
-        if (it != ds->end()) {
-            return false;
-        }
-        return true;
+        return ds->lookupKey(key);
     }
 
     V insert(const int tid, const K& key, const V& val) {

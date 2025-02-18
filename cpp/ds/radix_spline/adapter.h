@@ -8,7 +8,8 @@
 #   include "tree_stats.h"
 #endif
 
-#include "ALEX/src/core/alex.h"
+#include "RadixSpline/include/rs/builder.h"
+#include "RadixSpline/include/rs/radix_spline.h"
 
 #define RECORD_MANAGER_T record_manager<Reclaim, Alloc, Pool, int>
 #define DATA_STRUCTURE_T alex::Alex<K, V>

@@ -12,7 +12,7 @@
 #include "CHT/include/cht/builder.h"
 
 #define RECORD_MANAGER_T record_manager<Reclaim, Alloc, Pool, int>
-#define DATA_STRUCTURE_T cht::CompactHistTree<K, V>
+#define DATA_STRUCTURE_T cht::CompactHistTree<K>
 
 template <typename K, typename V, class Reclaim = reclaimer_debra<K>, class Alloc = allocator_new<K>, class Pool = pool_none<K>>
 class ds_adapter {
@@ -27,7 +27,18 @@ public:
                Random64 * const unused2)
             : NO_VALUE(VALUE_RESERVED)
             , ds(new DATA_STRUCTURE_T())
-    {}
+    {
+        std::vector<KeyType> keys(1e6);
+        generate(keys.begin(), keys.end(), rand);
+        keys.push_back(424242);
+        std::sort(keys.begin(), keys.end());
+
+        const unsigned numBins = 64; // each node will have 64 separate bins
+        const unsigned maxError = 4; // the error of the index
+        cht::Builder<KeyType> chtb(KEY_MIN, KEY_MAX, numBins, maxError, false, useCache);
+        for (const auto& key : keys) chtb.AddKey(key);
+        ds = &chtb.Finalize();
+    }
 
     ~ds_adapter() {
         delete ds;
@@ -54,31 +65,20 @@ public:
     }
 
     V insert(const int tid, const K& key, const V& val) {
-        auto res = ds->insert(key, val);
-        if (res.second()) {
-            return res.first();
-        }
-        return val; // fail
+        return NO_VALUE; // not supported
     }
 
     V insertIfAbsent(const int tid, const K& key, const V& val) {
-        auto res = ds->insert(key, val);
-        if (res.second) {
-            //return std::dynamic_cast<V>((*res.first).second);
-            return (*res.first).second;
-        }
-        return val; // fail
+        return NO_VALUE; // not supported
     }
 
     V erase(const int tid, const K& key) {
-        ds->erase(key);
-        return NO_VALUE; // fail
+        return NO_VALUE; // not supported
     }
 
     V find(const int tid, const K& key) {
         auto it = ds->find(key);
         if (it != ds->end()) {
-            // return std::dynamic_cast<V&>((*res).first);
             return (*it).second;
         }
         return NO_VALUE; // fail;
