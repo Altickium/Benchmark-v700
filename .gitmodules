@@ -18,18 +18,15 @@
 [submodule "cpp/ds/alex/ALEX"]
 	path = cpp/ds/alex/ALEX
 	url = git@github.com:microsoft/ALEX.git
-[submodule "cpp/ds/CHT"]
-	path = cpp/ds/CHT
+[submodule "cpp/ds/hist_tree/CHT"]
+	path = cpp/ds/hist_tree/CHT
 	url = git@github.com:stoianmihail/CHT.git
-[submodule "cpp/ds/FST"]
-	path = cpp/ds/FST
+[submodule "cpp/ds/succinct_tries/FST"]
+	path = cpp/ds/succinct_tries/FST
 	url = git@github.com:christophanneser/FST.git
-[submodule "cpp/ds/PGM-index"]
-	path = cpp/ds/PGM-index
-	url = git@github.com:gvinciguerra/PGM-index.git
-[submodule "cpp/ds/rs"]
-	path = cpp/ds/rs
+[submodule "cpp/ds/radix_spline/RadixSpline"]
+	path = cpp/ds/radix_spline/RadixSpline
 	url = git@github.com:learnedsystems/RadixSpline.git
-[submodule "cpp/ds/ts"]
-	path = cpp/ds/ts
+[submodule "cpp/ds/trie_spline/TrieSpline"]
+	path = cpp/ds/trie_spline/TrieSpline
 	url = git@github.com:stoianmihail/PLEX.git
