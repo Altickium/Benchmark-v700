@@ -8,24 +8,28 @@
 #   include "tree_stats.h"
 #endif
 
+#include "ALEX/src/core/alex.h"
+
 #define RECORD_MANAGER_T record_manager<Reclaim, Alloc, Pool, int>
+#define DATA_STRUCTURE_T alex::Alex<K, V>
 
 template <typename K, typename V, class Reclaim = reclaimer_debra<K>, class Alloc = allocator_new<K>, class Pool = pool_none<K>>
 class ds_adapter {
 private:
-    RECORD_MANAGER_T * const recmgr;
     const V NO_VALUE;
+    DATA_STRUCTURE_T * const ds;
 public:
     ds_adapter(const int NUM_THREADS,
-               const K& unused1,
-               const K& unused2,
-               const V& unused3,
-               Random64 * const unused4)
-    : recmgr(new RECORD_MANAGER_T(NUM_THREADS, SIGQUIT))
-    , NO_VALUE(unused3)
+               const K& KEY_MIN,
+               const K& KEY_MAX,
+               const V& VALUE_RESERVED,
+               Random64 * const unused2)
+            : NO_VALUE(VALUE_RESERVED)
+            , ds(new DATA_STRUCTURE_T())
     {}
+
     ~ds_adapter() {
-        delete recmgr;
+        delete ds;
     }
 
     V getNoValue() {
@@ -33,38 +37,74 @@ public:
     }
 
     void initThread(const int tid) {
-        recmgr->initThread(tid);
+        // do nothing
     }
+
     void deinitThread(const int tid) {
-        recmgr->deinitThread(tid);
+        // do nothing
     }
 
     bool contains(const int tid, const K& key) {
-        return false;
+        auto it = ds->find(key);
+        if (it != ds->end()) {
+            return false;
+        }
+        return true;
     }
+
     V insert(const int tid, const K& key, const V& val) {
+        auto res = ds->insert(key, val);
+        if (res.second()) {
+            return res.first();
+        }
         return val; // fail
     }
+
     V insertIfAbsent(const int tid, const K& key, const V& val) {
+        auto res = ds->insert(key, val);
+        if (res.second) {
+            //return std::dynamic_cast<V>((*res.first).second);
+            return (*res.first).second;
+        }
         return val; // fail
     }
+
     V erase(const int tid, const K& key) {
+        ds->erase(key);
         return NO_VALUE; // fail
     }
+
     V find(const int tid, const K& key) {
-        return NO_VALUE;
+        auto it = ds->find(key);
+        if (it != ds->end()) {
+            // return std::dynamic_cast<V&>((*res).first);
+            return (*it).second;
+        }
+        return NO_VALUE; // fail;
     }
+
     int rangeQuery(const int tid, const K& lo, const K& hi, K * const resultKeys, V * const resultValues) {
+        for (auto it = ds->lower_bound(lo); it != ds->lower_bound(hi); it++) {
+            //something
+        }
         return 0;
     }
+
     void printSummary() {
-        recmgr->printStatus();
+        auto stats = ds->get_stats();
+        std::cout << "Final num keys: " << stats.num_keys
+                << std::endl;  // expected: 199
+        std::cout << "Num inserts: " << stats.num_inserts
+                << std::endl;  // expected: 109
     }
+
     bool validateStructure() {
         return true;
     }
+
     void printObjectSizes() {
     }
+
     void debugGCSingleThreaded() {}
 
 #ifdef USE_TREE_STATS

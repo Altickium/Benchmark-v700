@@ -28,6 +28,7 @@ public:
             : NO_VALUE(VALUE_RESERVED)
             , ds(new DATA_STRUCTURE_T())
     {
+        // TODO: JSON argument passing
         std::vector<KeyType> keys(1e6);
         generate(keys.begin(), keys.end(), rand);
         keys.push_back(424242);
