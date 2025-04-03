@@ -4,9 +4,6 @@ import contention.benchmark.workload.data.map.abstractions.DataMap;
 import contention.benchmark.workload.data.map.abstractions.DataMapBuilder;
 import contention.benchmark.workload.data.map.impls.ArrayDataMap;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
