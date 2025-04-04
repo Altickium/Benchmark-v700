@@ -22,6 +22,9 @@ public class BenchParameters {
     public Parameters warmUp;
 
     public BenchParameters() {
+        for (DataMapBuilder currentBuilder : DataMapBuilderSerializer.getBuilders().values()) {
+            currentBuilder.init(range);
+        }
         test = new Parameters();
         createDefaultPrefill();
         warmUp = new Parameters();
