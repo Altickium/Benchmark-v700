@@ -18,13 +18,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive' 
 
       - name: Install dependencies
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential cmake libpapi-dev libnuma-dev
-          git submodule update --init
+      
+      - name: Upload Submodules
+        uses: actions/upload-artifact@v3
+        with:
+          name: submodules
+          path: |
+            .git/modules
+            .gitmodules
 
       - name: Build Microbench
         working-directory: ./cpp/microbench
@@ -47,6 +56,11 @@ jobs:
         with:
           name: microbench-bin
           path: cpp/microbench/bin
+      - uses: actions/download-artifact@v4
+        with:
+          name: submodules 
+          path: .git 
+
 
       - name: Test Different Build Flags
         working-directory: ./cpp/microbench
@@ -91,6 +105,11 @@ jobs:
         with:
           name: microbench-bin
           path: cpp/microbench/bin
+      - uses: actions/download-artifact@v4
+        with:
+          name: submodules 
+          path: .git 
+      
 
       - name: Test Specific Targets
         working-directory: ./cpp/microbench
@@ -115,6 +134,10 @@ jobs:
         with:
           name: microbench-bin
           path: cpp/microbench/bin
+      - uses: actions/download-artifact@v4
+        with:
+          name: submodules 
+          path: .git 
 
       - name: Test Reclaimers and Pools
         working-directory: ./cpp/microbench
