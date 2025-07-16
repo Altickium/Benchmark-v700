@@ -28,7 +28,7 @@ jobs:
           sudo apt-get install -y build-essential cmake libpapi-dev libnuma-dev
       
       - name: Upload Submodules
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: submodules
           path: |
