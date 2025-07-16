@@ -16,9 +16,6 @@ jobs:
   build_benchmark:
     name: "Build Microbench"
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./cpp
     steps:
       - uses: actions/checkout@v4
 
@@ -29,14 +26,14 @@ jobs:
           sudo apt-get install -y build-essential cmake libpapi-dev libnuma-dev
 
       - name: Build Microbench
-        working-directory: ./microbench
+        working-directory: ./cpp/microbench
         run: make -j${{ env.MAKE_JOBS }}
 
       - name: Upload Microbench Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: microbench-bin
-          path: microbench/bin
+          path: cpp/microbench/bin
 
   # ==================== TEST STAGE ====================
   test_benchmark_options:
@@ -48,10 +45,10 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: microbench-bin
-          path: microbench/bin
+          path: cpp/microbench/bin
 
       - name: Test Different Build Flags
-        working-directory: ./microbench
+        working-directory: ./cpp/microbench
         run: |
           echo "#########################################################"
           echo "## make"
@@ -92,10 +89,10 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: microbench-bin
-          path: microbench/bin
+          path: cpp/microbench/bin
 
       - name: Test Specific Targets
-        working-directory: ./microbench
+        working-directory: ./cpp/microbench
         run: |
           echo "#########################################################"
           echo "## make ds-reclaim-pool"
@@ -116,10 +113,10 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: microbench-bin
-          path: microbench/bin
+          path: cpp/microbench/bin
 
       - name: Test Reclaimers and Pools
-        working-directory: ./microbench
+        working-directory: ./cpp/microbench
         run: |
           make all DATA_STRUCTURES="brown_ext_abtree_lf" \
             RECLAIMERS="none debra debracap ebr_token ebr_tree hazardptr" \
