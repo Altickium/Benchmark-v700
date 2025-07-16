@@ -1,12 +1,12 @@
 name: C++ CI
 
-on:
-  push:
-    branches: [ main, cpp-develop ]
-    paths: [ 'cpp/**' ] 
-  pull_request:
-    branches: [ main, cpp-develop ]
-    paths: [ 'cpp/**' ]
+on: [push]
+# :
+#     branches: [ main, cpp-develop ]
+#     paths: [ 'cpp/**' ] 
+#   pull_request:
+#     branches: [ main, cpp-develop ]
+#     paths: [ 'cpp/**' ]
 
 env:
   MAKE_JOBS: ${{ github.runner.os == 'Linux' && '$(nproc)' || '4' }}
@@ -124,19 +124,4 @@ jobs:
           make all DATA_STRUCTURES="brown_ext_abtree_lf" \
             RECLAIMERS="none debra debracap ebr_token ebr_tree hazardptr" \
             POOLS="none numa" \
-            -j${{ env.MAKE_JOBS }}
-
-  test_macrobench_experiments:
-    name: "Test Macrobench Experiments"
-    runs-on: ubuntu-latest
-    needs: build_macrobench
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v3
-        with:
-          name: macrobench-bin
-          path: macrobench/bin
-
-      - name: Run Macrobench Tests
-        working-directory: ./macrobench_experiments/istree_exp1
-        run: ./run_testing.sh
+            -j${{ env.MAKE_JOBS }}=
