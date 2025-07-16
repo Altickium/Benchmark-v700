@@ -24,6 +24,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential cmake libpapi-dev libnuma-dev
+          git submodule update --init
 
       - name: Build Microbench
         working-directory: ./cpp/microbench
