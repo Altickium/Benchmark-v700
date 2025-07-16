@@ -33,7 +33,7 @@ jobs:
         run: make -j${{ env.MAKE_JOBS }}
 
       - name: Upload Microbench Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: microbench-bin
           path: microbench/bin
@@ -45,7 +45,7 @@ jobs:
     needs: build_benchmark
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: microbench-bin
           path: microbench/bin
@@ -89,7 +89,7 @@ jobs:
     needs: build_benchmark
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: microbench-bin
           path: microbench/bin
@@ -113,7 +113,7 @@ jobs:
     needs: build_benchmark
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: microbench-bin
           path: microbench/bin
